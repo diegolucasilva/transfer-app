@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  customer-service:
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - mongo-compose-network
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - /Users/diegolucas/mongotmp:/data/db
+    networks:
+      - mongo-compose-network
+
+networks:
+  mongo-compose-network:
+    driver: bridge
