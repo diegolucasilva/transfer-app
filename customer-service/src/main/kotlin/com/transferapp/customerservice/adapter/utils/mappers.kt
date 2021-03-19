@@ -8,20 +8,20 @@ import com.transferapp.customerservice.domain.entity.Customer
 
 fun CustomerEntity.toDomain(): Customer {
     val status: Customer.Status? = Customer.Status.values().getOrNull(status)
-    return Customer(id, name, email, documentId, status)
+    return Customer(id, name, email, documentId, role, status)
 }
 
 fun Customer.toEntity(): CustomerEntity {
     val status = status!!.ordinal
-    return CustomerEntity(id, name, email, documentId, status)
+    return CustomerEntity(id, name, email, documentId, status, role)
 }
 
 fun Customer.toResponse(): CustomerDTOResponse {
-    return CustomerDTOResponse(id, name, email, documentId, status?.ordinal)
+    return CustomerDTOResponse(id, name, email, documentId, status?.ordinal, role)
 }
 
 fun CustomerDTORequest.toCustomer(): Customer {
-    return Customer(null,name,email,documentId)
+    return Customer(null, name, email, documentId, role)
 }
 
 

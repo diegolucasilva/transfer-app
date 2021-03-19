@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class GetCustomerController(private val getCustomerUseCase: GetCustomerUseCase){
 
-    @GetMapping("/customer/{id}")
-    fun execute(@PathVariable("id") id:String): CustomerDTOResponse {
+    @GetMapping("/customer/{documentId}")
+    fun execute(@PathVariable("documentId") id:String): CustomerDTOResponse {
         val customer = getCustomerUseCase.execute(id)
         return customer.toResponse()
     }
