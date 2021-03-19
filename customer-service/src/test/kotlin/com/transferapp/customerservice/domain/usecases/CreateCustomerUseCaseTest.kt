@@ -5,6 +5,9 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.transferapp.customerservice.domain.entity.Customer
+import com.transferapp.customerservice.domain.entity.RoleType
+import com.transferapp.customerservice.domain.port.out.persistence.GetCustomerByDocumentIdPort
+import com.transferapp.customerservice.domain.port.out.persistence.GetCustomerByEmailPort
 import com.transferapp.customerservice.domain.port.out.persistence.SaveCustomerPort
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -13,7 +16,10 @@ import org.junit.jupiter.api.Test
 internal class CreateCustomerUseCaseTest{
 
     private val saveCustomerPort: SaveCustomerPort = mock()
-    private val createCustomerUseCase = CreateCustomerUseCase(saveCustomerPort)
+    private val getCustomerByEmailPort: GetCustomerByEmailPort = mock()
+    private val getCustomerByDocumentIdPort: GetCustomerByDocumentIdPort = mock()
+
+    private val createCustomerUseCase = CreateCustomerUseCase(saveCustomerPort, getCustomerByEmailPort, getCustomerByDocumentIdPort)
 
     @Test
     fun `Test Create Customer Use Case - verify if customer is created`() {
@@ -35,6 +41,7 @@ internal class CreateCustomerUseCaseTest{
             "11121-2121",
             "John",
             "john@gmail.com",
-            "45474"
+            "45474",
+            RoleType.USER
     )
 }

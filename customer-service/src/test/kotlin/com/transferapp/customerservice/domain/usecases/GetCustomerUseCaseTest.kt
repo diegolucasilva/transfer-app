@@ -5,17 +5,21 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.transferapp.customerservice.adapter.out.persistence.CustomerNotFoundException
+import com.transferapp.customerservice.adapter.out.persistence.entity.CustomerEntity
+import com.transferapp.customerservice.adapter.out.persistence.exception.CustomerNotFoundException
 import com.transferapp.customerservice.domain.entity.Customer
-import com.transferapp.customerservice.domain.port.out.persistence.GetCustomerPort
+import com.transferapp.customerservice.domain.entity.RoleType
+import com.transferapp.customerservice.domain.port.out.persistence.GetCustomerByDocumentIdPort
+import com.transferapp.customerservice.domain.port.out.persistence.GetCustomerByIdPort
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
+import java.util.*
 
 internal class GetCustomerUseCaseTest{
 
-    private val getCustomerPort: GetCustomerPort = mock()
-    private val getCustomerUseCase = GetCustomerUseCase(getCustomerPort)
+    private val getCustomerByDocumentIdPort: GetCustomerByDocumentIdPort = mock()
+    private val getCustomerUseCase = GetCustomerUseCase(getCustomerByDocumentIdPort)
 
     @Test
     fun `Test Get Customer Use Case - verify if customer is returned`() {
@@ -24,7 +28,7 @@ internal class GetCustomerUseCaseTest{
 
         val customerResponse = whenUseCaseIsExecuted(id)
 
-        verify(getCustomerPort, times(1)).getById(id)
+        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(id)
         Assertions.assertEquals(customerResponse, customer)
     }
 
@@ -36,7 +40,7 @@ internal class GetCustomerUseCaseTest{
         assertThrows(CustomerNotFoundException::class.java) {
             whenUseCaseIsExecuted(wrongId)
         }
-        verify(getCustomerPort, times(1)).getById(wrongId)
+        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(wrongId)
 
     }
 
@@ -44,15 +48,17 @@ internal class GetCustomerUseCaseTest{
 
     private fun givenCustomer(id:String){
         if(id.isNotBlank())
-            whenever(getCustomerPort.getById(id)).thenReturn(customer)
+            whenever(getCustomerByDocumentIdPort.getByDocumentId(id)).thenReturn(Optional.of(customer))
         else
-        whenever(getCustomerPort.getById(id)).thenThrow(CustomerNotFoundException::class.java)
+        whenever(getCustomerByDocumentIdPort.getByDocumentId(id)).thenThrow(CustomerNotFoundException::class.java)
     }
 
-    private val customer = Customer(
+    private val customer = CustomerEntity(
             "6666",
             "John",
             "john@gmail.com",
-            "45474"
+            "45474",
+            1,
+            RoleType.USER
     )
 }
