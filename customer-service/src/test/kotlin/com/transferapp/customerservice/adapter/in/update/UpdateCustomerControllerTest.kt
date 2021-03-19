@@ -6,6 +6,7 @@ import com.transferapp.customerservice.adapter.`in`.dto.CustomerDTOResponse
 import com.transferapp.customerservice.adapter.out.persistence.CustomerRepository
 import com.transferapp.customerservice.adapter.out.persistence.entity.CustomerEntity
 import com.transferapp.customerservice.domain.entity.Customer
+import com.transferapp.customerservice.domain.entity.RoleType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -49,7 +50,9 @@ class UpdateCustomerControllerTest{
                 name = "John",
                 email = "john@gmail.com",
                 documentId = "45474",
-                status = 1
+                status = 1,
+                RoleType.USER
+
         )
         val customerSaved = customerRepository.save(customerEntity)
         return customerSaved.id
@@ -62,7 +65,9 @@ class UpdateCustomerControllerTest{
                 "John",
                 "john@gmail.com",
                 "45474",
-                1
+                1,
+                RoleType.USER
+
         )
         Assertions.assertEquals(response?.statusCode, HttpStatus.OK)
         Assertions.assertNotNull(response)
@@ -71,6 +76,8 @@ class UpdateCustomerControllerTest{
         Assertions.assertEquals(response?.body?.name, customerDtoResponseExpected.name)
         Assertions.assertEquals(response?.body?.email, customerDtoResponseExpected.email)
         Assertions.assertEquals(response?.body?.documentId, customerDtoResponseExpected.documentId)
+        Assertions.assertEquals(response?.body?.role, customerDtoResponseExpected.role)
+
     }
 
     private fun whenInvalidRequestIsMade(request: HttpEntity<CustomerDTORequest>):  ResponseEntity<String>? {
@@ -85,7 +92,8 @@ class UpdateCustomerControllerTest{
         val customerDTORequest =  CustomerDTORequest(
                 "John",
                 "john@gmail.com",
-                "45474"
+                "45474",
+                RoleType.USER
         )
         return HttpEntity<CustomerDTORequest>(customerDTORequest, HttpHeaders())
     }

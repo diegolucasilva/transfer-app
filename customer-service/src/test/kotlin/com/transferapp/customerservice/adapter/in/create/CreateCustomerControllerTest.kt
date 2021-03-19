@@ -3,6 +3,7 @@ package com.transferapp.customerservice.adapter.`in`.create
 import com.transferapp.customerservice.adapter.`in`.dto.CustomerDTORequest
 import com.transferapp.customerservice.adapter.`in`.dto.CustomerDTOResponse
 import com.transferapp.customerservice.domain.entity.Customer
+import com.transferapp.customerservice.domain.entity.RoleType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -37,7 +38,8 @@ import org.springframework.http.ResponseEntity
                 "John",
                 "john@gmail.com",
                 "45474",
-                1
+                1,
+                RoleType.USER
         )
         Assertions.assertEquals(response?.statusCode, HttpStatus.CREATED)
         Assertions.assertNotNull(response)
@@ -46,6 +48,8 @@ import org.springframework.http.ResponseEntity
         Assertions.assertEquals(response?.body?.name, customerDtoResponseExpected.name)
         Assertions.assertEquals(response?.body?.email, customerDtoResponseExpected.email)
         Assertions.assertEquals(response?.body?.documentId, customerDtoResponseExpected.documentId)
+        Assertions.assertEquals(response?.body?.role, customerDtoResponseExpected.role)
+
     }
 
     private fun whenRequestIsMade(request: HttpEntity<CustomerDTORequest>): ResponseEntity<CustomerDTOResponse>? {
@@ -56,7 +60,8 @@ import org.springframework.http.ResponseEntity
         val customerDTORequest =  CustomerDTORequest(
                 "John",
                 "john@gmail.com",
-                "45474"
+                "45474",
+                RoleType.USER
         )
         return HttpEntity<CustomerDTORequest>(customerDTORequest, HttpHeaders())
     }
