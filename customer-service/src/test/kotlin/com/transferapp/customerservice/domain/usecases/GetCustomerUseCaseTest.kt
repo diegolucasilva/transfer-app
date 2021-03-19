@@ -7,10 +7,8 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.transferapp.customerservice.adapter.out.persistence.entity.CustomerEntity
 import com.transferapp.customerservice.adapter.out.persistence.exception.CustomerNotFoundException
-import com.transferapp.customerservice.domain.entity.Customer
 import com.transferapp.customerservice.domain.entity.RoleType
 import com.transferapp.customerservice.domain.port.out.persistence.GetCustomerByDocumentIdPort
-import com.transferapp.customerservice.domain.port.out.persistence.GetCustomerByIdPort
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test

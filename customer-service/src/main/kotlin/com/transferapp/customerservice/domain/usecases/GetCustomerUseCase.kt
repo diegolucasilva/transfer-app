@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service
 class GetCustomerUseCase(private val getCustomerByDocumentIdPort: GetCustomerByDocumentIdPort) {
 
     fun execute(documentId: String): Customer {
-        val customerEntity =  getCustomerByDocumentIdPort.getByDocumentId(documentId).orElseThrow{ CustomerNotFoundException(documentId) }
+        val customerEntity =  getCustomerByDocumentIdPort.getByDocumentId(documentId).
+        orElseThrow{ CustomerNotFoundException(documentId) }
         return customerEntity.toDomain()
     }
 
