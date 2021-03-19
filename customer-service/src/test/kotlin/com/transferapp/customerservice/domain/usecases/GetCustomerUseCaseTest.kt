@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.transferapp.customerservice.adapter.out.persistence.entity.CustomerEntity
 import com.transferapp.customerservice.adapter.out.persistence.exception.CustomerNotFoundException
+import com.transferapp.customerservice.adapter.utils.toDomain
 import com.transferapp.customerservice.domain.entity.RoleType
 import com.transferapp.customerservice.domain.port.out.persistence.GetCustomerByDocumentIdPort
 import org.junit.jupiter.api.Assertions
@@ -21,13 +22,13 @@ internal class GetCustomerUseCaseTest{
 
     @Test
     fun `Test Get Customer Use Case - verify if customer is returned`() {
-        val id= "6666"
+        val id= "45474"
         givenCustomer(id)
 
         val customerResponse = whenUseCaseIsExecuted(id)
 
         verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(id)
-        Assertions.assertEquals(customerResponse, customer)
+        Assertions.assertEquals(customerResponse, customerEntity.toDomain())
     }
 
     @Test
@@ -46,12 +47,12 @@ internal class GetCustomerUseCaseTest{
 
     private fun givenCustomer(id:String){
         if(id.isNotBlank())
-            whenever(getCustomerByDocumentIdPort.getByDocumentId(id)).thenReturn(Optional.of(customer))
+            whenever(getCustomerByDocumentIdPort.getByDocumentId(id)).thenReturn(Optional.of(customerEntity))
         else
         whenever(getCustomerByDocumentIdPort.getByDocumentId(id)).thenThrow(CustomerNotFoundException::class.java)
     }
 
-    private val customer = CustomerEntity(
+    private val customerEntity = CustomerEntity(
             "6666",
             "John",
             "john@gmail.com",

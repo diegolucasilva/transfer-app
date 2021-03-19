@@ -42,8 +42,8 @@ class GetCustomerControllerTest{
                 status = 1,
             RoleType.USER
         )
-        val customerSaved = customerRepository.save(customerEntity)
-        return customerSaved.id
+        customerRepository.save(customerEntity)
+        return customerEntity.documentId
     }
 
     @Test
@@ -58,7 +58,7 @@ class GetCustomerControllerTest{
         return testRestTemplate.getForEntity("/customer/${id}", CustomerDTOResponse::class.java);
     }
     private fun whenInvalidRequestIsMade(): ResponseEntity<String>? {
-        return testRestTemplate.getForEntity("/customer/1", String::class.java);
+        return testRestTemplate.getForEntity("/customer/45474", String::class.java);
     }
 
     private fun thenResponseShouldBeValid(response: ResponseEntity<CustomerDTOResponse>?) {
@@ -79,8 +79,5 @@ class GetCustomerControllerTest{
         Assertions.assertEquals(response?.body?.email, customerDtoResponseExpected.email)
         Assertions.assertEquals(response?.body?.documentId, customerDtoResponseExpected.documentId)
         Assertions.assertEquals(response?.body?.role, customerDtoResponseExpected.role)
-
     }
-
-
 }

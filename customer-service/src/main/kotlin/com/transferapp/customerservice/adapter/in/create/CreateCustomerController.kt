@@ -19,7 +19,7 @@ class CreateCustomerController(private val createCustomerUseCase: CreateCustomer
     @PostMapping("/customer")
     @ResponseStatus(HttpStatus.CREATED)
     fun execute(@Valid @RequestBody customerDTORequest: CustomerDTORequest): CustomerDTOResponse {
-        val customer = createCustomerUseCase.execute(customerDTORequest.toCustomer())
+            val customer = createCustomerUseCase.execute(customerDTORequest.toCustomer())
         return customer.toResponse()
     }
 }
