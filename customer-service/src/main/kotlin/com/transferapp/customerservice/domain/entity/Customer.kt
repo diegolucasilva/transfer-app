@@ -6,7 +6,8 @@ data class Customer(
         val name:String,
         val email:String,
         val documentId: String,
-        var status: Status?=Status.ACTIVE) {
+        val role: RoleType,
+        var status: Status?=Status.ACTIVE){
 
     fun inactive() {
         status = Status.INACTIVE
@@ -16,5 +17,7 @@ data class Customer(
         INACTIVE(0),
         ACTIVE(1)
     }
+
+
 }
 

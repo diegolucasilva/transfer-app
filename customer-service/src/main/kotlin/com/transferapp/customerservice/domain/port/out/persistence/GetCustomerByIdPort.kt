@@ -2,6 +2,6 @@ package com.transferapp.customerservice.domain.port.out.persistence
 
 import com.transferapp.customerservice.domain.entity.Customer
 
-interface GetCustomerPort {
+interface GetCustomerByIdPort {
     fun getById(id: String): Customer
 }
