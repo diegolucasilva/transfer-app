@@ -1,0 +1,14 @@
+cloud:
+  aws:
+    region:
+      static: sa-east-1
+
+sqs:
+  region: sa-east-1
+  endpoint: http://localhost:4566
+  queueName: notifcation-queue-sqs
+
+notificationExt:
+  url: https://run.mocky.io/v3
+server:
+  port: 8081

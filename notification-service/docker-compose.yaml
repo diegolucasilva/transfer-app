@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  #  notification-service:
+  # build: .
+  #  ports:
+  #    - "8081:8081"
+  # networks:
+  #   - notification-compose-network
+  localstack:
+    image: localstack/localstack
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - SERVICES=sqs
+      # AWS
+      - AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+      - AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+      - AWS_DEFAULT_REGION=sa-east-1
+      - AWS_DEFAULT_OUTPUT=json
+    ports:
+      - "4566:4566"
+    networks:
+      - notification-compose-network
+networks:
+  notification-compose-network:
+    driver: bridge
+
+#aws sqs --endpoint-url=http://localhost:4566 create-queue --queue-name notifcation-queue-sqs --region sa-east-1
+#aws sqs --endpoint-url=http://localhost:4566 send-message --queue-url  notifcation-queue-sqs --message-body "Information about the largest city in Any Region."
