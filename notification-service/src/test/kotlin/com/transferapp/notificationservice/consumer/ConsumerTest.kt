@@ -28,7 +28,7 @@ internal class ConsumerTest{
     fun `Test send error message`() {
         val message = givenMessage();
         val messageHeaders = givenMessageHeaders();
-        givenNotificationExtServiceProxy(message)
+        givenNotificationExtServiceProxyError(message)
 
         Assertions.assertThrows(NotificationServiceException::class.java) {
             consumer.receive(message, messageHeaders)
@@ -36,7 +36,7 @@ internal class ConsumerTest{
         verify(notificationExtServiceProxy, times(1)).sendNotification(message)
     }
 
-    private fun givenNotificationExtServiceProxy(message:String){
+    private fun givenNotificationExtServiceProxyError(message:String){
         whenever(notificationExtServiceProxy.sendNotification(message)).thenThrow(RuntimeException())
     }
     private fun givenMessage() = "Transfer to acoount 123. value 2213.112"

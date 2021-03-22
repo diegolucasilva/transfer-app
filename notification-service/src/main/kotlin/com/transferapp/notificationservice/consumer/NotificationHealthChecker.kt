@@ -27,6 +27,7 @@ class NotificationHealthChecker(
                 notificationExtServiceProxy.healthcheck()
             } catch (e: Exception) {
                 stopPollingQueue()
+                return
             }
             if (!simpleMessageListenerContainer.isRunning(SQS_QUEUE_NAME)) {
                 logger.info("Starting queue listener")
