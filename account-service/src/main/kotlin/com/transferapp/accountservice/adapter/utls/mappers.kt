@@ -9,5 +9,5 @@ fun AccountDTORequest.toAccount(): Account {
 }
 
 fun Account.toResponse(): AccountDTOResponse {
-    return AccountDTOResponse(id, number, customerDocumentId)
+    return AccountDTOResponse(id, number, customerDocumentId, status.ordinal)
 }
