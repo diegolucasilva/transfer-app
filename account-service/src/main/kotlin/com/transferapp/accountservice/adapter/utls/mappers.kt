@@ -6,7 +6,10 @@ import com.transferapp.accountservice.adapter.out.persistence.entity.AccountEnti
 import com.transferapp.accountservice.domain.entity.Account
 
 fun AccountDTORequest.toAccount(): Account {
-    return Account(customerDocumentId)
+    return Account(
+        customerDocumentId = customerDocumentId,
+        number= number
+        )
 }
 
 fun Account.toResponse(): AccountDTOResponse {
