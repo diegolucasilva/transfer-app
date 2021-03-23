@@ -15,9 +15,9 @@ import javax.validation.Valid
 @RestController
 class CreateAccountController(private val createAccountUseCase: CreateAccountUseCase) {
 
-    @PostMapping("/customer")
+    @PostMapping("/account")
     @ResponseStatus(HttpStatus.CREATED)
-    fun execute(@Valid @RequestBody accountDTORequest: AccountDTORequest): AccountDTOResponse {
+    fun execute( @Valid @RequestBody accountDTORequest: AccountDTORequest): AccountDTOResponse {
         val account = createAccountUseCase.execute(accountDTORequest.toAccount())
         return account.toResponse()
     }
