@@ -8,7 +8,7 @@ import java.util.*
 @Repository
 interface CustomerRepository: MongoRepository<CustomerEntity,String>{
 
-    fun findByEmail(email: String): Optional<CustomerEntity>;
-    fun findByDocumentId(documentId: String): Optional<CustomerEntity>;
+    fun findByEmail(email: String): Optional<CustomerEntity>
+    fun findByDocumentId(documentId: String): Optional<CustomerEntity>
 
 }

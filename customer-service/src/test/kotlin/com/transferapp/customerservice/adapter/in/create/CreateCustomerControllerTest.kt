@@ -51,7 +51,6 @@ import org.springframework.test.annotation.DirtiesContext
         Assertions.assertEquals(response?.body?.email, customerDtoResponseExpected.email)
         Assertions.assertEquals(response?.body?.documentId, customerDtoResponseExpected.documentId)
         Assertions.assertEquals(response?.body?.role, customerDtoResponseExpected.role)
-
     }
 
     private fun whenRequestIsMade(request: HttpEntity<CustomerDTORequest>): ResponseEntity<CustomerDTOResponse>? {
