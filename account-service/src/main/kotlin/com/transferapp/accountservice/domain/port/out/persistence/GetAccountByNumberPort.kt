@@ -1,8 +1,8 @@
 package com.transferapp.accountservice.domain.port.out.persistence
 
 import com.transferapp.accountservice.adapter.out.persistence.entity.AccountEntity
-import com.transferapp.accountservice.domain.entity.Account
+import java.util.*
 
-interface SaveAccountPort {
-    fun save(account: Account): AccountEntity
+interface GetAccountByNumberPort {
+    fun getByNumber(number: Int): Optional<AccountEntity>
 }
