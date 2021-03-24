@@ -20,7 +20,7 @@ class ExceptionHandler(private val logger: Logger){
         logger.error("Exception caught in handleException :  {} ", ex)
         return when (ex) {
             is AccountNotFoundException -> {
-                getDefaultResponseMessage(ex.message, HttpStatus.NOT_FOUND)
+                getDefaultValidationResponseMessage(ex.fieldErrors, HttpStatus.BAD_REQUEST)
             }
             is InvalidAccountException -> {
                 getDefaultValidationResponseMessage(ex.fieldErrors, HttpStatus.BAD_REQUEST)
