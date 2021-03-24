@@ -7,6 +7,7 @@ import com.transferapp.customerservice.domain.port.out.persistence.GetCustomerBy
 import com.transferapp.customerservice.domain.port.out.persistence.GetCustomerByEmailPort
 import com.transferapp.customerservice.domain.port.out.persistence.SaveCustomerPort
 import org.springframework.stereotype.Service
+import org.springframework.validation.FieldError
 
 @Service
 class CreateCustomerUseCase(
@@ -21,9 +22,13 @@ class CreateCustomerUseCase(
     }
 
     private fun checkIfCustomerAlreadyExists(email: String, documentId: String){
+        val fieldErrors: MutableList<FieldError> = mutableListOf()
         if (getCustomerByDocumentIdPort.getByDocumentId(documentId).isPresent)
-            throw InvalidCustomerException("customer documentID already exists")
-        else if(getCustomerByEmailPort.getByEmail(email).isPresent)
-            throw InvalidCustomerException("customer email already exists")
+            fieldErrors.add(FieldError("", "documentId", "customer documentID already exists"))
+        if(getCustomerByEmailPort.getByEmail(email).isPresent)
+            fieldErrors.add(FieldError("", "fromAccountId", "customer email already exists"))
+        if(fieldErrors.isNotEmpty()){
+            throw InvalidCustomerException(fieldErrors)
+        }
     }
 }

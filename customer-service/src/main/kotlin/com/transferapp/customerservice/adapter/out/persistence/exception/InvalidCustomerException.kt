@@ -1,3 +1,8 @@
 package com.transferapp.customerservice.adapter.out.persistence.exception
 
-class InvalidCustomerException(val messageError: String): RuntimeException("Invalid customer " + messageError)
+import org.springframework.validation.FieldError
+
+class InvalidCustomerException(val fieldErrors: MutableList<FieldError>): RuntimeException() {
+    constructor(parameter_name: String = "", description: String) :
+            this(mutableListOf(FieldError("", parameter_name, description)))
+}
