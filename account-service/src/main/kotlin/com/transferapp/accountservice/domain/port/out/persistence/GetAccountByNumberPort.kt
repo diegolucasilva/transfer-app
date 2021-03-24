@@ -4,5 +4,5 @@ import com.transferapp.accountservice.adapter.out.persistence.entity.AccountEnti
 import java.util.*
 
 interface GetAccountByNumberPort {
-    fun getByNumber(number: Int): Optional<AccountEntity>
+    fun getByNumber(number: String): Optional<AccountEntity>
 }

@@ -9,6 +9,6 @@ import java.util.*
 interface AccountRepository: MongoRepository<AccountEntity, String> {
 
 
-    fun findByNumber(number: Int): Optional<AccountEntity>
+    fun findByNumber(number: String): Optional<AccountEntity>
     fun findByCustomerDocumentId(documentId: String): Optional<AccountEntity>
 }

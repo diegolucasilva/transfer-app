@@ -21,11 +21,11 @@ class CreateAccountUseCase(
     }
 
 
-    private fun checkIfAccountAlreadyExists(documentId: String, accountNumber: Int){
+    private fun checkIfAccountAlreadyExists(documentId: String, accountNumber: String){
         if (getAccountByDocumentIdPort.getByCustomerDocumentId(documentId).isPresent)
-            throw InvalidAccountException("account documentID already exists")
+            throw InvalidAccountException(description ="account documentID already exists")
         else if(getAccountByNumberPort.getByNumber(accountNumber).isPresent)
-            throw InvalidAccountException("account number already exists")
+            throw InvalidAccountException(description = "account number already exists")
     }
 
 }

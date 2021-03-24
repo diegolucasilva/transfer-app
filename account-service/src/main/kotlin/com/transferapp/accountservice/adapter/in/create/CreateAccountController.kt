@@ -6,12 +6,14 @@ import com.transferapp.accountservice.adapter.utls.toAccount
 import com.transferapp.accountservice.adapter.utls.toResponse
 import com.transferapp.accountservice.domain.usecases.CreateAccountUseCase
 import org.springframework.http.HttpStatus
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import javax.validation.Valid
 
+@Validated
 @RestController
 class CreateAccountController(private val createAccountUseCase: CreateAccountUseCase) {
 

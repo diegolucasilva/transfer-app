@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id
 data class AccountEntity(
     @Id
     var id: String? = null,
-    val number: Int,
+    val number: String,
     val status: Int,
     val customerDocumentId: String,
     val balance: Double)

@@ -24,7 +24,7 @@ class AccountAdapter(private val accountRepository: AccountRepository): SaveAcco
         return accountRepository.findByCustomerDocumentId(id)
     }
 
-    override fun getByNumber(number: Int): Optional<AccountEntity> {
+    override fun getByNumber(number: String): Optional<AccountEntity> {
         return accountRepository.findByNumber(number)
     }
 

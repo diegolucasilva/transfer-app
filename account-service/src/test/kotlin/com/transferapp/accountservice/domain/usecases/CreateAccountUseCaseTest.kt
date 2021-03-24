@@ -61,7 +61,7 @@ internal class CreateAccountUseCaseTest{
 
         private val accountEntity = AccountEntity(
             "11121-2121",
-            45454,
+            "45454",
             1,
             "45474",
             100.00

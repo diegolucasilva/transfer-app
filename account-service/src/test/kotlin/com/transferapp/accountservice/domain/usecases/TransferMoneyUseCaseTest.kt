@@ -23,8 +23,8 @@ internal class TransferMoneyUseCaseTest{
 
     @Test
     fun `When use case is executed should transfer money from an account to another account`() {
-        val fromAccount = givenAccount(123, 150.10, Account.Status.ACTIVE.ordinal)
-        val toAccount = givenAccount(999, 200.10, Account.Status.ACTIVE.ordinal)
+        val fromAccount = givenAccount("123", 150.10, Account.Status.ACTIVE.ordinal)
+        val toAccount = givenAccount("999", 200.10, Account.Status.ACTIVE.ordinal)
         val moneyTransfer = TransferMoney(fromAccount.number,toAccount.number,100.00)
 
         whenUseCaseIsExecuted(moneyTransfer)
@@ -36,15 +36,15 @@ internal class TransferMoneyUseCaseTest{
 
     @Test
     fun `When origin account has no funds should throws exception`() {
-        val fromAccount = givenAccount(123, 90.00, Account.Status.ACTIVE.ordinal)
-        val toAccount = givenAccount(999, 200.10, Account.Status.ACTIVE.ordinal)
+        val fromAccount = givenAccount("123", 90.00, Account.Status.ACTIVE.ordinal)
+        val toAccount = givenAccount("999", 200.10, Account.Status.ACTIVE.ordinal)
         val moneyTransfer = TransferMoney(fromAccount.number,toAccount.number,100.00)
 
         val thrown = Assertions.assertThrows(InvalidAccountException::class.java) {
             whenUseCaseIsExecuted(moneyTransfer)
 
         }
-        assertEquals( "account ${fromAccount.number} has no funds sufficient",thrown.messageError)
+        assertEquals( "account ${fromAccount.number} has no funds sufficient",thrown.fieldErrors[0].defaultMessage)
         verify(getAccountByNumberPort, times(1)).getByNumber(fromAccount.number)
         verify(getAccountByNumberPort, times(1)).getByNumber(toAccount.number)
         verify(transactionTransferMoneyPort, times(0)).transactionTransferMoney(any<Account>(), any<Account>())
@@ -53,15 +53,15 @@ internal class TransferMoneyUseCaseTest{
 
     @Test
     fun `When origin account is inactive should throws exception`() {
-        val fromAccount = givenAccount(123, 100.00, Account.Status.INACTIVE.ordinal)
-        val toAccount = givenAccount(999, 200.10, Account.Status.ACTIVE.ordinal)
+        val fromAccount = givenAccount("123", 100.00, Account.Status.INACTIVE.ordinal)
+        val toAccount = givenAccount("999", 200.10, Account.Status.ACTIVE.ordinal)
         val moneyTransfer = TransferMoney(fromAccount.number,toAccount.number,100.00)
 
         val thrown = Assertions.assertThrows(InvalidAccountException::class.java) {
             whenUseCaseIsExecuted(moneyTransfer)
 
         }
-        assertEquals( "account ${fromAccount.number} is inactive", thrown.messageError)
+        assertEquals( "account ${fromAccount.number} is inactive",thrown.fieldErrors[0].defaultMessage)
         verify(getAccountByNumberPort, times(1)).getByNumber(fromAccount.number)
         verify(getAccountByNumberPort, times(1)).getByNumber(toAccount.number)
         verify(transactionTransferMoneyPort, times(0)).transactionTransferMoney(any<Account>(), any<Account>())
@@ -69,15 +69,15 @@ internal class TransferMoneyUseCaseTest{
 
     @Test
     fun `When destination account is inactive should throws exception`() {
-        val fromAccount = givenAccount(123, 100.00, Account.Status.ACTIVE.ordinal)
-        val toAccount = givenAccount(999, 200.10, Account.Status.INACTIVE.ordinal)
+        val fromAccount = givenAccount("123", 100.00, Account.Status.ACTIVE.ordinal)
+        val toAccount = givenAccount("999", 200.10, Account.Status.INACTIVE.ordinal)
         val moneyTransfer = TransferMoney(fromAccount.number,toAccount.number,100.00)
 
         val thrown = Assertions.assertThrows(InvalidAccountException::class.java) {
             whenUseCaseIsExecuted(moneyTransfer)
 
         }
-        assertEquals( "account ${toAccount.number} is inactive", thrown.messageError)
+        assertEquals( "account ${toAccount.number} is inactive", thrown.fieldErrors[0].defaultMessage)
         verify(getAccountByNumberPort, times(1)).getByNumber(fromAccount.number)
         verify(getAccountByNumberPort, times(1)).getByNumber(toAccount.number)
         verify(transactionTransferMoneyPort, times(0)).transactionTransferMoney(any<Account>(), any<Account>())
@@ -87,7 +87,7 @@ internal class TransferMoneyUseCaseTest{
         return transferMoneyUseCase.execute(transferMoney)
     }
 
-    private fun givenAccount(accountNumber: Int, balance: Double, status: Int): AccountEntity{
+    private fun givenAccount(accountNumber: String, balance: Double, status: Int): AccountEntity{
         val accountEntity = AccountEntity(
             "11121-2121",
             accountNumber,

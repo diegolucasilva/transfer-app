@@ -38,7 +38,7 @@ internal class CreateAccountControllerTest{
     private fun givenAccountRequest(): HttpEntity<AccountDTORequest> {
         val accountDTORequest =  AccountDTORequest(
             "4545445",
-            4545111,
+            "4545111",
             100.00
         )
         return HttpEntity<AccountDTORequest>(accountDTORequest, HttpHeaders())
@@ -50,6 +50,6 @@ internal class CreateAccountControllerTest{
         Assertions.assertNotNull(response?.body?.id)
         Assertions.assertEquals(response?.body?.status, Account.Status.ACTIVE.ordinal)
         Assertions.assertEquals(response?.body?.customerDocumentId, "4545445")
-        Assertions.assertEquals(response?.body?.number,4545111)
+        Assertions.assertEquals(response?.body?.number,"4545111")
     }
 }

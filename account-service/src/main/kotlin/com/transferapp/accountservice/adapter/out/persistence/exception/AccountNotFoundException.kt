@@ -1,3 +1,8 @@
 package com.transferapp.accountservice.adapter.out.persistence.exception
 
-class AccountNotFoundException(val id: String): RuntimeException("Could not find account " + id)
+import org.springframework.validation.FieldError
+
+class AccountNotFoundException(val fieldErrors: MutableList<FieldError>): RuntimeException() {
+    constructor(parameter_name: String = "", description: String) :
+            this(mutableListOf(FieldError("", parameter_name, description)))
+}

@@ -5,7 +5,7 @@ import com.transferapp.accountservice.adapter.out.persistence.exception.InvalidA
 
 data class Account(
     var id: String?  = null,
-    val number: Int,
+    val number: String,
     val status: Status? = Status.ACTIVE,
     var balance: Double = 0.0,
     val customerDocumentId: String){
@@ -16,7 +16,7 @@ data class Account(
         if(this.balance!! >= amount) {
                this.balance -= amount
         }else
-            throw InvalidAccountException("account ${this.number} has no funds sufficient")
+            throw InvalidAccountException(description ="account ${this.number} has no funds sufficient")
     }
 
     fun credit(amount: Double) {
@@ -26,7 +26,7 @@ data class Account(
 
     private fun isActive(){
         if(this.status == Status.INACTIVE)
-            throw InvalidAccountException("account ${this.number} is inactive")
+            throw InvalidAccountException(description = "account ${this.number} is inactive")
     }
 
         enum class Status(val status: Int) {

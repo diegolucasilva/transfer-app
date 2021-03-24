@@ -27,7 +27,7 @@ internal class AccountTest{
         val thrown = Assertions.assertThrows(InvalidAccountException::class.java) {
             account.debit(amount)
         }
-        Assertions.assertEquals("account ${account.number} has no funds sufficient", thrown.messageError)
+        Assertions.assertEquals("account ${account.number} has no funds sufficient", thrown.fieldErrors[0].defaultMessage)
         Assertions.assertEquals(account.balance, balance)
     }
 
@@ -50,14 +50,14 @@ internal class AccountTest{
         val thrown = Assertions.assertThrows(InvalidAccountException::class.java) {
             account.credit(amount)
         }
-        Assertions.assertEquals("account ${account.number} is inactive", thrown.messageError)
+        Assertions.assertEquals("account ${account.number} is inactive", thrown.fieldErrors[0].defaultMessage)
         Assertions.assertEquals(account.balance, balance)
     }
 
     private fun givenAccount(balance: Double, status:  Account.Status): Account {
        return Account(
             "11121-2121",
-            1212,
+            "1212",
             status,
             balance,
        "23132"
