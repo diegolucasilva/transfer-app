@@ -28,7 +28,6 @@ internal class TransferMoneyControllerTest{
     @Autowired
     lateinit var accountRepository: AccountRepository
 
-
     @BeforeEach
     fun cleanMongo(){
         accountRepository.deleteAll()
@@ -117,5 +116,4 @@ internal class TransferMoneyControllerTest{
         val jsonArray = jsonObject.getJSONArray("error_messages")
         return jsonArray.getJSONObject(0).getString("description")
     }
-
 }
