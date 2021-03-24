@@ -38,7 +38,8 @@ internal class CreateAccountControllerTest{
     private fun givenAccountRequest(): HttpEntity<AccountDTORequest> {
         val accountDTORequest =  AccountDTORequest(
             "4545445",
-            4545111
+            4545111,
+            100.00
         )
         return HttpEntity<AccountDTORequest>(accountDTORequest, HttpHeaders())
     }

@@ -5,5 +5,6 @@ import javax.validation.constraints.NotBlank
 data class AccountDTORequest(
     @field:NotBlank
     val customerDocumentId: String,
-    val number: Int
+    val number: Int,
+    val balance: Double
     )

@@ -6,4 +6,5 @@ data class AccountDTOResponse(
     val number: Int,
     val customerDocumentId: String,
     val status: Int,
+    val balance: Double
 )
