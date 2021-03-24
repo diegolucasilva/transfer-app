@@ -7,4 +7,5 @@ data class AccountEntity(
     var id: String? = null,
     val number: Int,
     val status: Int,
-    val customerDocumentId: String)
+    val customerDocumentId: String,
+    val balance: Double)

@@ -25,7 +25,8 @@ fun Account.toEntity(): AccountEntity {
     return AccountEntity(
         number = number,
         status = status,
-        customerDocumentId = customerDocumentId
+        customerDocumentId = customerDocumentId,
+        balance = balance
        )
 }
 
@@ -35,6 +36,7 @@ fun AccountEntity.toDomain(): Account {
         id = id,
         number = number,
         status = status,
-        customerDocumentId = customerDocumentId
+        customerDocumentId = customerDocumentId,
+        balance = balance
     )
 }
