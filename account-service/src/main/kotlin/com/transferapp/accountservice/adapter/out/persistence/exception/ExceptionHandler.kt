@@ -25,11 +25,11 @@ class ExceptionHandler(private val logger: Logger){
             is InvalidAccountException -> {
                 getDefaultValidationResponseMessage(ex.fieldErrors, HttpStatus.BAD_REQUEST)
             }
-            is HttpMessageNotReadableException -> {
-                getDefaultResponseMessage(ex.message, HttpStatus.BAD_REQUEST)
-            }
             is MethodArgumentNotValidException -> {
                 getDefaultValidationResponseMessage(ex.fieldErrors, HttpStatus.BAD_REQUEST)
+            }
+            is HttpMessageNotReadableException -> {
+                getDefaultResponseMessage(ex.message, HttpStatus.BAD_REQUEST)
             }
             else -> {
                 getDefaultResponseMessage(httpStatus =HttpStatus.SERVICE_UNAVAILABLE)
