@@ -57,13 +57,13 @@ internal class CreateAccountUseCaseTest{
     private fun givenAccountInDatabase(customerDocumentId: String) {
         whenever(saveAccountPort.save(accountEntity.toDomain())).thenReturn(accountEntity)
         whenever(getAccountByDocumentIdPortPort.getByCustomerDocumentId(customerDocumentId)).thenReturn(Optional.of(accountEntity))
-
     }
 
         private val accountEntity = AccountEntity(
             "11121-2121",
             45454,
             1,
-            "45474"
+            "45474",
+            100.00
         )
 }
