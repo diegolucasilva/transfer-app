@@ -6,12 +6,14 @@ import com.transferapp.accountservice.domain.entity.Account
 import com.transferapp.accountservice.domain.port.out.persistence.GetAccountByDocumentIdPort
 import com.transferapp.accountservice.domain.port.out.persistence.GetAccountByNumberPort
 import com.transferapp.accountservice.domain.port.out.persistence.SaveAccountPort
+import com.transferapp.accountservice.domain.port.out.persistence.TransactionTransferMoneyPort
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Component
 class AccountAdapter(private val accountRepository: AccountRepository): SaveAccountPort, GetAccountByDocumentIdPort,
-    GetAccountByNumberPort {
+    GetAccountByNumberPort, TransactionTransferMoneyPort {
 
     override fun save(account: Account): AccountEntity {
         val accountEntity =  account.toEntity()
@@ -24,6 +26,12 @@ class AccountAdapter(private val accountRepository: AccountRepository): SaveAcco
 
     override fun getByNumber(number: Int): Optional<AccountEntity> {
         return accountRepository.findByNumber(number)
+    }
+
+    @Transactional
+    override fun transactionTransferMoney(fromAccount: Account, toAccount: Account) {
+        val accounts = listOf(fromAccount.toEntity(),toAccount.toEntity())
+        accountRepository.saveAll(accounts)
     }
 
 

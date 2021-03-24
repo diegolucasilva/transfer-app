@@ -1,7 +1,7 @@
 package com.transferapp.accountservice.domain.entity
 
 
-data class MoneyTransfer(
+data class TransferMoney(
     val fromAccountId: Int,
     val toAccountId: Int,
     val amount: Double){
