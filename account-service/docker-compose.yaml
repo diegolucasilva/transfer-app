@@ -1,15 +1,13 @@
 version: '3'
 
 services:
-  customer-service:
-    container_name: customer-service
+  account-service:
+    container_name: account-service
     build: .
     ports:
-      - "8080:8080"
+      - "8081:8081"
     networks:
       - mongo-compose-network
-    depends_on:
-      - mongo
   mongo:
     image: mongo
     container_name: mongo

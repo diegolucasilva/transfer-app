@@ -1,7 +1,19 @@
 spring:
+  profiles: default
   data:
     mongodb:
       host: localhost
+      port: 27017
+      database: account_db
+server:
+  port: 8081
+
+---
+spring:
+  profiles: docker-test
+  data:
+    mongodb:
+      host: mongo
       port: 27017
       database: account_db
 server:

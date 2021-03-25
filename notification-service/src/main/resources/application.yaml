@@ -1,3 +1,5 @@
+spring:
+  profiles: default
 cloud:
   aws:
     region:
@@ -6,6 +8,23 @@ cloud:
 sqs:
   region: sa-east-1
   endpoint: http://localhost:4566
+  queueName: notification-queue-sqs
+
+notificationExt:
+  url: https://run.mocky.io/v3
+server:
+  port: 8083
+
+---
+spring:
+  profiles: docker-test
+cloud:
+  aws:
+    region:
+      static: sa-east-1
+sqs:
+  region: sa-east-1
+  endpoint: http://localstack:4566
   queueName: notification-queue-sqs
 
 notificationExt:
