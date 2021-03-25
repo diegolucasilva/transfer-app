@@ -1,6 +1,6 @@
 package com.transferapp.moneytransferservice.domain.usecases
 
-import com.transferapp.moneytransferservice.adapter.out.CustomerDTOResponse
+import com.transferapp.moneytransferservice.adapter.out.dto.CustomerDTOResponse
 import com.transferapp.moneytransferservice.adapter.out.exception.RequestDeniedException
 import com.transferapp.moneytransferservice.adapter.utils.toTransferMoneyDTORequest
 import com.transferapp.moneytransferservice.domain.entity.Transaction
@@ -45,7 +45,7 @@ class TransferMoneyUseCase(
         return transactionSaved
     }
 
-    private fun validadeIfTransactionIsValid(customerFromAccount: CustomerDTOResponse, customerToAccount: CustomerDTOResponse ):MutableList<FieldError> {
+    private fun validadeIfTransactionIsValid(customerFromAccount: CustomerDTOResponse, customerToAccount: CustomerDTOResponse):MutableList<FieldError> {
         val fieldErrors: MutableList<FieldError> = mutableListOf()
         if(customerFromAccount.role == CustomerDTOResponse.RoleType.SHOP_KEEPER){
             fieldErrors.add(FieldError("", "", "Transaction from shop keepers not allow"))

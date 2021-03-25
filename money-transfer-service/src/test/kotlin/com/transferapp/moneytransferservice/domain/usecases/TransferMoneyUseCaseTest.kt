@@ -1,8 +1,8 @@
 package com.transferapp.moneytransferservice.domain.usecases
 
 import com.nhaarman.mockitokotlin2.*
-import com.transferapp.moneytransferservice.adapter.out.AuthorizerXPTOResponse
-import com.transferapp.moneytransferservice.adapter.out.CustomerDTOResponse
+import com.transferapp.moneytransferservice.adapter.out.dto.AuthorizerXPTOResponse
+import com.transferapp.moneytransferservice.adapter.out.dto.CustomerDTOResponse
 import com.transferapp.moneytransferservice.adapter.out.exception.RequestDeniedException
 import com.transferapp.moneytransferservice.domain.entity.Transaction
 import com.transferapp.moneytransferservice.domain.port.out.dto.GetAuthorizationFromAuthorizerXPTOServicePort

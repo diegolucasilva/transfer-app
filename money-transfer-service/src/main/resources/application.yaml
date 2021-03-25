@@ -8,7 +8,13 @@ sqs:
   endpoint: http://localhost:4566
   queueName: notifcation-queue-sqs
 
-notificationExt:
+authorizer-XPTO:
   url: https://run.mocky.io/v3
+
+customer-service:
+  url: http://localhost:8080
+account-service:
+  url: http://localhost:8081/
+
 server:
-  port: 8083
+  port: 8082

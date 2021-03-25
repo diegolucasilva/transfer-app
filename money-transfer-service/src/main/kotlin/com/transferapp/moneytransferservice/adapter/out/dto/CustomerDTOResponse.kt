@@ -1,4 +1,4 @@
-package com.transferapp.moneytransferservice.adapter.out
+package com.transferapp.moneytransferservice.adapter.out.dto
 
 
 
@@ -7,7 +7,8 @@ data class CustomerDTOResponse(val id:String?,
                                val email:String,
                                val documentId: String,
                                val status: Int?,
-                               val role: RoleType){
+                               val role: RoleType
+){
     enum class RoleType{
         USER, SHOP_KEEPER
     }

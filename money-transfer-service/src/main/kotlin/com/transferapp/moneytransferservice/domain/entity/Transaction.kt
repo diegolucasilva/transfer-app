@@ -3,7 +3,7 @@ package com.transferapp.moneytransferservice.domain.entity
 import java.time.LocalDateTime
 
 data class Transaction(
-    var id:String?,
+    var id:String?=null,
     val localDateTime: LocalDateTime?= LocalDateTime.now(),
     val fromAccountId: String,
     val toAccountId: String,

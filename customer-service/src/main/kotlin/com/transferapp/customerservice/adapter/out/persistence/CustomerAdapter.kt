@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class CustomerByAdapter(private val customerRepository: CustomerRepository):
+class CustomerAdapter(private val customerRepository: CustomerRepository):
     SaveCustomerPort,
     GetCustomerByDocumentIdPort,
     GetCustomerByEmailPort {
