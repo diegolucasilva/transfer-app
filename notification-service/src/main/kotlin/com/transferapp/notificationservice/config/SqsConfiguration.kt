@@ -20,8 +20,6 @@ class SqsConfiguration {
     private val REGION: String? = null
     @Value("\${sqs.endpoint}")
     private val SQS_ENPOINT: String? = null
-    @Value("\${sqs.queueName}")
-    private val SQS_QUEUE_NAME: String? = null
 
     @Bean
     @Primary

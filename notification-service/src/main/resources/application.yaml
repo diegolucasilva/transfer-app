@@ -6,7 +6,7 @@ cloud:
 sqs:
   region: sa-east-1
   endpoint: http://localhost:4566
-  queueName: notifcation-queue-sqs
+  queueName: notification-queue-sqs
 
 notificationExt:
   url: https://run.mocky.io/v3

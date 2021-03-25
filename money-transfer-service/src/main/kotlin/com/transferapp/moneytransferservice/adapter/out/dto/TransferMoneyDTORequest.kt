@@ -1,7 +1,12 @@
 package com.transferapp.moneytransferservice.adapter.out.dto
 
 data class TransferMoneyDTORequest(
-    val fromAccountId: String,
-    val toAccountId: String,
+    val fromCustomer: CustomerDTORequest,
+    val toCustomer: CustomerDTORequest,
     val amount: Double){
+
+    data class CustomerDTORequest(
+        val accountId: String,
+        val documentId: String
+    )
 }

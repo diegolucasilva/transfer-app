@@ -23,6 +23,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.json:json:20210307")
+	implementation("com.amazonaws:aws-java-sdk-sqs:1.11.982")
 	implementation ("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.+")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")

@@ -5,10 +5,7 @@ import com.transferapp.moneytransferservice.adapter.out.dto.AuthorizerXPTORespon
 import com.transferapp.moneytransferservice.adapter.out.dto.CustomerDTOResponse
 import com.transferapp.moneytransferservice.adapter.out.exception.RequestDeniedException
 import com.transferapp.moneytransferservice.domain.entity.Transaction
-import com.transferapp.moneytransferservice.domain.port.out.dto.GetAuthorizationFromAuthorizerXPTOServicePort
-import com.transferapp.moneytransferservice.domain.port.out.dto.GetCustomerByDocumentIdServicePort
-import com.transferapp.moneytransferservice.domain.port.out.dto.SaveTransactionPort
-import com.transferapp.moneytransferservice.domain.port.out.dto.TransactionTransferMoneyServicePort
+import com.transferapp.moneytransferservice.domain.port.out.dto.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -19,8 +16,13 @@ internal class TransferMoneyUseCaseTest{
     private val getCustomerByDocumentIdPort: GetCustomerByDocumentIdServicePort = mock()
     private val getAuthorizationFromAuthorizerXPTOServicePort: GetAuthorizationFromAuthorizerXPTOServicePort = mock()
     private val transactionTransferMoneyServicePort: TransactionTransferMoneyServicePort = mock()
+    private val sendNotificationPort: SendNotificationPort = mock()
 
-    private val transferMoneyUseCase = TransferMoneyUseCase(saveTransactionPort,getCustomerByDocumentIdPort, getAuthorizationFromAuthorizerXPTOServicePort, transactionTransferMoneyServicePort)
+    private val transferMoneyUseCase = TransferMoneyUseCase(saveTransactionPort,
+        getCustomerByDocumentIdPort,
+        getAuthorizationFromAuthorizerXPTOServicePort,
+        transactionTransferMoneyServicePort,
+        sendNotificationPort)
 
     @Test
     fun `When use case is executed should transfer money`(){
@@ -28,12 +30,12 @@ internal class TransferMoneyUseCaseTest{
         val transaction = givenTransaction()
 
         //MOCK
-        val fromAccount = givenAccountResponse(transaction.fromAccountId,1, CustomerDTOResponse.RoleType.USER)
-        val toAccount = givenAccountResponse(transaction.toAccountId,1, CustomerDTOResponse.RoleType.USER)
+        val fromAccount = givenAccountResponse(transaction.fromCustomer.accountId,1, CustomerDTOResponse.RoleType.USER)
+        val toAccount = givenAccountResponse(transaction.fromCustomer.accountId,1, CustomerDTOResponse.RoleType.USER)
         val authorizerResponse = givenAuthorizerXPTO("Autorizado")
         whenever(saveTransactionPort.save(transaction)).thenReturn(transaction)
-        whenever(getCustomerByDocumentIdPort.getByDocumentId(transaction.fromAccountId)).thenReturn(fromAccount)
-        whenever(getCustomerByDocumentIdPort.getByDocumentId(transaction.toAccountId)).thenReturn(toAccount)
+        whenever(getCustomerByDocumentIdPort.getByDocumentId(transaction.fromCustomer.documentId)).thenReturn(fromAccount)
+        whenever(getCustomerByDocumentIdPort.getByDocumentId(transaction.toCustomer.documentId)).thenReturn(toAccount)
         whenever(getAuthorizationFromAuthorizerXPTOServicePort.getAuthorization(transaction)).thenReturn(authorizerResponse)
 
         //WHEN
@@ -41,9 +43,11 @@ internal class TransferMoneyUseCaseTest{
 
         //THEN
         verify(saveTransactionPort, times(2)).save(any<Transaction>())
-        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(transaction.fromAccountId)
-        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(transaction.toAccountId)
+        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(transaction.fromCustomer.documentId)
+        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(transaction.toCustomer.documentId)
         verify(getAuthorizationFromAuthorizerXPTOServicePort, times(1)).getAuthorization(transaction)
+        verify(sendNotificationPort, times(1)).send(any<String>())
+
         Assertions.assertEquals(transactionResponse.status, Transaction.Status.OK)
     }
 
@@ -53,11 +57,11 @@ internal class TransferMoneyUseCaseTest{
         val transaction = givenTransaction()
 
         //MOCK
-        val fromAccount = givenAccountResponse(transaction.fromAccountId,1, CustomerDTOResponse.RoleType.SHOP_KEEPER)
-        val toAccount = givenAccountResponse(transaction.toAccountId,1, CustomerDTOResponse.RoleType.USER)
+        val fromAccount = givenAccountResponse(transaction.fromCustomer.accountId,1, CustomerDTOResponse.RoleType.SHOP_KEEPER)
+        val toAccount = givenAccountResponse(transaction.toCustomer.accountId,1, CustomerDTOResponse.RoleType.USER)
         whenever(saveTransactionPort.save(transaction)).thenReturn(transaction)
-        whenever(getCustomerByDocumentIdPort.getByDocumentId(transaction.fromAccountId)).thenReturn(fromAccount)
-        whenever(getCustomerByDocumentIdPort.getByDocumentId(transaction.toAccountId)).thenReturn(toAccount)
+        whenever(getCustomerByDocumentIdPort.getByDocumentId(transaction.fromCustomer.documentId)).thenReturn(fromAccount)
+        whenever(getCustomerByDocumentIdPort.getByDocumentId(transaction.toCustomer.documentId)).thenReturn(toAccount)
 
         //WHEN
         val thrown = Assertions.assertThrows(RequestDeniedException::class.java) {
@@ -68,8 +72,9 @@ internal class TransferMoneyUseCaseTest{
         //THEN
         Assertions.assertEquals("Transaction from shop keepers not allow", thrown.fieldErrors[0].defaultMessage)
         verify(saveTransactionPort, times(2)).save(any<Transaction>())
-        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(transaction.fromAccountId)
-        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(transaction.toAccountId)
+        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(transaction.fromCustomer.documentId)
+        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(transaction.toCustomer.documentId)
+        verify(sendNotificationPort, times(0)).send(any<String>())
     }
 
     @Test
@@ -78,11 +83,11 @@ internal class TransferMoneyUseCaseTest{
         val transaction = givenTransaction()
 
         //MOCK
-        val fromAccount = givenAccountResponse(transaction.fromAccountId,0, CustomerDTOResponse.RoleType.USER)
-        val toAccount = givenAccountResponse(transaction.toAccountId,0, CustomerDTOResponse.RoleType.SHOP_KEEPER)
+        val fromAccount = givenAccountResponse(transaction.fromCustomer.accountId,0, CustomerDTOResponse.RoleType.USER)
+        val toAccount = givenAccountResponse(transaction.toCustomer.accountId,0, CustomerDTOResponse.RoleType.SHOP_KEEPER)
         whenever(saveTransactionPort.save(transaction)).thenReturn(transaction)
-        whenever(getCustomerByDocumentIdPort.getByDocumentId(transaction.fromAccountId)).thenReturn(fromAccount)
-        whenever(getCustomerByDocumentIdPort.getByDocumentId(transaction.toAccountId)).thenReturn(toAccount)
+        whenever(getCustomerByDocumentIdPort.getByDocumentId(transaction.fromCustomer.documentId)).thenReturn(fromAccount)
+        whenever(getCustomerByDocumentIdPort.getByDocumentId(transaction.toCustomer.documentId)).thenReturn(toAccount)
 
         //WHEN
         val thrown = Assertions.assertThrows(RequestDeniedException::class.java) {
@@ -96,8 +101,10 @@ internal class TransferMoneyUseCaseTest{
         Assertions.assertEquals("Customer inactive. Transaction not allow", thrown.fieldErrors[1].defaultMessage)
         Assertions.assertEquals("customerToAccount", thrown.fieldErrors[1].field)
         verify(saveTransactionPort, times(2)).save(any<Transaction>())
-        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(transaction.fromAccountId)
-        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(transaction.toAccountId)
+        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(transaction.fromCustomer.documentId)
+        verify(getCustomerByDocumentIdPort, times(1)).getByDocumentId(transaction.toCustomer.documentId)
+        verify(sendNotificationPort, times(0)).send(any<String>())
+
     }
 
     private fun givenAccountResponse(documentId: String, status: Int, role: CustomerDTOResponse.RoleType): CustomerDTOResponse {
@@ -114,10 +121,12 @@ internal class TransferMoneyUseCaseTest{
 
 
     private fun givenTransaction(): Transaction {
+        val fromCustomer = Transaction.Customer("123", "1213212132")
+        val toCustomer   = Transaction.Customer("124", "1213212135")
         return Transaction(
             id  ="123",
-            fromAccountId = "123",
-            toAccountId = "124",
+            fromCustomer = fromCustomer,
+            toCustomer= toCustomer,
             amount = 3232.30,
         )
     }

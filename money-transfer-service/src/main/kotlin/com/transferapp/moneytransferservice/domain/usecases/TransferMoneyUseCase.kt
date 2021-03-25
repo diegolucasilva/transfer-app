@@ -1,15 +1,14 @@
 package com.transferapp.moneytransferservice.domain.usecases
 
+import com.transferapp.moneytransferservice.adapter.utils.toJson
 import com.transferapp.moneytransferservice.adapter.out.dto.CustomerDTOResponse
 import com.transferapp.moneytransferservice.adapter.out.exception.RequestDeniedException
-import com.transferapp.moneytransferservice.adapter.utils.toTransferMoneyDTORequest
+import com.transferapp.moneytransferservice.adapter.utils.toTransferMoneyAccountServiceDTORequest
 import com.transferapp.moneytransferservice.domain.entity.Transaction
-import com.transferapp.moneytransferservice.domain.port.out.dto.GetCustomerByDocumentIdServicePort
-import com.transferapp.moneytransferservice.domain.port.out.dto.GetAuthorizationFromAuthorizerXPTOServicePort
-import com.transferapp.moneytransferservice.domain.port.out.dto.SaveTransactionPort
-import com.transferapp.moneytransferservice.domain.port.out.dto.TransactionTransferMoneyServicePort
+import com.transferapp.moneytransferservice.domain.port.out.dto.*
 import org.springframework.stereotype.Service
 import org.springframework.validation.FieldError
+import java.util.concurrent.CompletableFuture
 
 @Service
 class TransferMoneyUseCase(
@@ -17,16 +16,22 @@ class TransferMoneyUseCase(
     private val getCustomerByDocumentIdPort: GetCustomerByDocumentIdServicePort,
     private val getAuthorizationFromAuthorizerXPTOServicePort: GetAuthorizationFromAuthorizerXPTOServicePort,
     private val transactionTransferMoneyServicePort: TransactionTransferMoneyServicePort,
-) {
+    private val sendNotificationPort: SendNotificationPort,
+
+    ) {
     private val CUSTOMER_INACTIVE= 0
     private val AUTORIZADO = "Autorizado"
 
     fun execute(transaction: Transaction): Transaction{
         val transactionSaved = saveTransactionPort.save(transaction)
-        val customerFromAccount = getCustomerByDocumentIdPort.getByDocumentId(transaction.fromAccountId)
-        val customerToAccount = getCustomerByDocumentIdPort.getByDocumentId(transaction.toAccountId)
+        val customerFromAccount = CompletableFuture.supplyAsync {
+            getCustomerByDocumentIdPort.getByDocumentId(transaction.fromCustomer.documentId)
+        }
+        val customerToAccount =  CompletableFuture.supplyAsync {
+            getCustomerByDocumentIdPort.getByDocumentId(transaction.toCustomer.documentId)
+        }
 
-        val fieldErrorsList  = validadeIfTransactionIsValid(customerFromAccount, customerToAccount)
+        val fieldErrorsList  = validadeIfTransactionIsValid(customerFromAccount.get(), customerToAccount.get())
         if(fieldErrorsList.isNotEmpty()){
             transactionSaved.denied()
             saveTransactionPort.save(transactionSaved)
@@ -39,9 +44,10 @@ class TransferMoneyUseCase(
             saveTransactionPort.save(transactionSaved)
             throw RequestDeniedException(description = "transaction not authorized")
         }
-        transactionTransferMoneyServicePort.transactionTransferMoney(transaction.toTransferMoneyDTORequest())
+        transactionTransferMoneyServicePort.transactionTransferMoney(transaction.toTransferMoneyAccountServiceDTORequest())
         transactionSaved.confirm()
         saveTransactionPort.save(transactionSaved)
+        sendNotificationPort.send(transactionSaved.toJson())
         return transactionSaved
     }
 

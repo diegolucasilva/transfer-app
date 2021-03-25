@@ -10,7 +10,14 @@ data class TransactionEntity(
     @Id
     val id:String?,
     val localDateTime: LocalDateTime?,
-    val fromAccountId: String,
-    val toAccountId: String,
+    val fromCustomer: CustomerEntity,
+    val toCustomer: CustomerEntity,
     val amount: Double,
-    var status: Transaction.Status?)
+    var status: Transaction.Status?){
+
+
+    data class CustomerEntity(
+        val accountId: String,
+        val documentId: String
+    )
+}

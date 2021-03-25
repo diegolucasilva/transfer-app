@@ -25,5 +25,5 @@ networks:
   notification-compose-network:
     driver: bridge
 
-#aws sqs --endpoint-url=http://localhost:4566 create-queue --queue-name notifcation-queue-sqs --region sa-east-1
-#aws sqs --endpoint-url=http://localhost:4566 send-message --queue-url  notifcation-queue-sqs --message-body "Information about the largest city in Any Region."
+#aws sqs --endpoint-url=http://localhost:4566 create-queue --queue-name notification-queue-sqs --region sa-east-1
+#aws sqs --endpoint-url=http://localhost:4566 send-message --queue-url  notification-queue-sqs --message-body "Information about the largest city in Any Region."

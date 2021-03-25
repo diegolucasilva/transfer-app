@@ -6,7 +6,7 @@ cloud:
 sqs:
   region: sa-east-1
   endpoint: http://localhost:4566
-  queueName: notifcation-queue-sqs
+  queueName: /000000000000/notification-queue-sqs
 
 authorizer-XPTO:
   url: https://run.mocky.io/v3
