@@ -16,14 +16,16 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter")
-	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation ("org.springframework.cloud:spring-cloud-starter-openfeign:3.0.2")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-	implementation ("org.springframework.cloud:spring-cloud-starter-openfeign:3.0.2")
+	implementation("org.json:json:20210307")
+	implementation ("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.+")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
 	testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
 }
 

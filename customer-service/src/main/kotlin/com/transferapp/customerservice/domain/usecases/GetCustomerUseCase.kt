@@ -11,7 +11,7 @@ class GetCustomerUseCase(private val getCustomerByDocumentIdPort: GetCustomerByD
 
     fun execute(documentId: String): Customer {
         val customerEntity =  getCustomerByDocumentIdPort.getByDocumentId(documentId).
-        orElseThrow{ CustomerNotFoundException(description ="customer not found: $documentId}") }
+        orElseThrow{ CustomerNotFoundException(description ="customer not found: $documentId") }
         return customerEntity.toDomain()
     }
 

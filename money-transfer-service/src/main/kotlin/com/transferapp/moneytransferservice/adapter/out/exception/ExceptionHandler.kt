@@ -1,5 +1,10 @@
 package com.transferapp.moneytransferservice.adapter.out.exception
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import feign.FeignException
+import org.json.JSONObject
 import org.slf4j.Logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,6 +24,9 @@ class ExceptionHandler(private val logger: Logger){
     fun handleException(ex: Throwable): ResponseEntity<ErrorResponse> {
         logger.error("Exception caught in handleException :  {} ", ex)
         return when (ex) {
+            is FeignException -> {
+                getDefaultValidationResponseMessageFromFeign(ex)
+            }
             is RequestDeniedException -> {
                 getDefaultValidationResponseMessage(ex.fieldErrors, HttpStatus.FORBIDDEN)
             }
@@ -36,6 +44,26 @@ class ExceptionHandler(private val logger: Logger){
             }
         }
     }
+
+    private fun getDefaultValidationResponseMessageFromFeign(exception: FeignException):  ResponseEntity<ErrorResponse> {
+        val response = exception.message
+        val jsonObject = JSONObject(response?.substring(response!!.indexOf("{"), response.lastIndexOf("}") + 1))
+
+        val jsonArray = jsonObject.getJSONArray("error_messages")
+        val errorList: MutableList<ErrorResponse.ErrorDescriptor> = mutableListOf()
+
+        (0 until jsonArray.length()).forEach { index ->
+            val jsonObject = jsonArray.getJSONObject(index)
+            val error = ErrorResponse.ErrorDescriptor(parameterName= jsonObject.getString("parameterName"), description = jsonObject.getString("description"))
+            errorList.add(error)
+        }
+
+        return ResponseEntity.status(HttpStatus.valueOf(exception.status())).body(ErrorResponse(errorList))
+
+    }
+
+
+
     private fun getDefaultValidationResponseMessage(fieldErrors: MutableList<FieldError>? = null, httpStatus: HttpStatus) : ResponseEntity<ErrorResponse> {
         val errorList: MutableList<ErrorResponse.ErrorDescriptor> = mutableListOf()
         fieldErrors?.forEach {

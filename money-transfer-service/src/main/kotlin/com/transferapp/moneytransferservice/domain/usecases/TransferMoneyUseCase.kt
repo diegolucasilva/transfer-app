@@ -58,5 +58,4 @@ class TransferMoneyUseCase(
         }
         return fieldErrors
     }
-
 }
