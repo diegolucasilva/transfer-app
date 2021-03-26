@@ -12,7 +12,7 @@ Request is made to the orchestration service **money-transfer-service**</br>
 4. Checks if the transaction between customers is valid(*USER* TO *USER* or *USER* to *SHOP KEEPER*);
 5. Calls the **Authorization Service XPTO**;
 6. Effective the transaction in **account-service**;
-7. Update transaction with **OK** status;
+7. Updates transaction with **OK** status;
 8. Push the transaction information to the **notification-queue**;
 10. [notification-service](http://google.com) pulls message from the **notification-queue** an sends to **Notification External Service**
 
