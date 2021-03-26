@@ -1,6 +1,9 @@
 # transfer-app
 Service responsible to transfer money between accounts
 
+## Architecture
+![architecture](transfer-components.png)
+
 ## Sequence
 Request is made to the orchestration service [money-transfer-service](http://google.com):</br>
 1. Records the transaction with **PENDING** status;
@@ -11,4 +14,10 @@ Request is made to the orchestration service [money-transfer-service](http://goo
 6. Effective the transaction in [account-service](http://google.com);
 7. Update transaction with **OK** status;
 8. Push the transaction information to the **notification-queue**;
-9. [notification-service](http://google.com) pulls message from the **notification-queue** an sends to **Notification External Service**
+10. [notification-service](http://google.com) pulls message from the **notification-queue** an sends to **Notification External Service**
+
+
+
+## Aplication Design 
+![architecture](https://reflectoring.io/assets/img/posts/spring-hexagonal/hexagonal-architecture.png)
+
